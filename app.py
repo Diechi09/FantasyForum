@@ -9,6 +9,7 @@ from flask_wtf import CSRFProtect
 from flask_wtf.csrf import generate_csrf
 from datetime import datetime
 import json
+import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '888888888188881'
@@ -350,4 +351,8 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
         ensure_flair_column()
-    app.run(debug=True)
+    app.run(
+        debug=True,
+        host=os.environ.get("FLASK_RUN_HOST", "127.0.0.1"),
+        port=int(os.environ.get("PORT", 5000)),
+    )
