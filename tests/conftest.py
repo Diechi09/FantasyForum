@@ -1,9 +1,19 @@
+
+import os
+import sys
+
 import pytest
-from app import app as flask_app, db, User, Post, ensure_flair_column
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from app import create_app, db
+from app.models import Post, User
+from app.services.posts import ensure_flair_column
 
 @pytest.fixture
 def app():
     # Use in-memory DB and disable CSRF for tests
+    flask_app = create_app()
     flask_app.config.update(
         TESTING=True,
         SECRET_KEY="test-secret",
