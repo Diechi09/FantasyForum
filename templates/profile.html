@@ -1,16 +1,16 @@
 {% extends "base.html" %}
 {% block content %}
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
-    <h1 class="m-0">Home</h1>
-    <div class="nav nav-pills gap-2">
-      <a class="btn btn-outline-light btn-sm {% if not selected_flair %}active{% endif %}" href="{{ url_for('home') }}">All</a>
-      {% for val,label in flairs %}
-        <a class="btn btn-outline-light btn-sm {% if selected_flair==val %}active{% endif %}" href="{{ url_for('home', flair=val) }}">{{ label }}</a>
-      {% endfor %}
+    <div>
+      <h1 class="mb-1">{{ profile_user.username }}</h1>
+      <p class="text-secondary mb-0">{{ profile_user.email }}</p>
     </div>
+    {% if is_owner %}
+      <a class="btn btn-light fw-semibold" href="{{ url_for('new_post') }}">Write a post</a>
+    {% endif %}
   </div>
 
-  {% if posts and posts|length > 0 %}
+  {% if posts %}
     {% for post in posts %}
       <div class="card ff-card ff-shadow mb-3">
         <div class="card-body">
@@ -21,7 +21,7 @@
               </h3>
               <div class="d-flex align-items-center gap-2 mb-2">
                 <span class="badge badge-flair flair-{{ post.flair }}">{{ post.flair.replace('_',' ') }}</span>
-                <small class="text-secondary">by <a class="link-light" href="{{ url_for('user_profile', username=post.author.username) }}">{{ post.author.username }}</a> • {{ post.date_posted.strftime('%b %d, %Y') }}</small>
+                <small class="text-secondary">{{ post.date_posted.strftime('%b %d, %Y') }}</small>
               </div>
             </div>
             <a class="btn btn-sm btn-outline-light" href="{{ url_for('api_post_detail', post_id=post.id) }}">View JSON</a>
@@ -44,7 +44,7 @@
   {% else %}
     <div class="card ff-card ff-shadow">
       <div class="card-body">
-        <p class="mb-0">No posts yet. <a href="{{ url_for('new_post') }}">Create the first one</a>!</p>
+        <p class="mb-0 text-secondary">No posts yet.</p>
       </div>
     </div>
   {% endif %}

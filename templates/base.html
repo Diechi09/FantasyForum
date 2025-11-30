@@ -49,6 +49,7 @@
           </ul>
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             {% if current_user.is_authenticated %}
+              <li class="nav-item"><a class="nav-link" href="{{ url_for('user_profile', username=current_user.username) }}">Profile</a></li>
               <li class="nav-item me-2">
                 <a class="btn btn-light btn-sm fw-semibold" href="{{ url_for('new_post') }}">+ New Post</a>
               </li>

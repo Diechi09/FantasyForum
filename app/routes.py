@@ -6,7 +6,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 
 from forms import CommentForm, LoginForm, PostForm, RegistrationForm
 
-from .models import Post
+from .models import Post, User
 from .services.auth import authenticate_user, create_user, find_existing_user
 from .services.posts import (
     FLAIRS,
@@ -98,6 +98,23 @@ def register_routes(app):
     def post_detail(post_id):
         post = Post.query.get_or_404(post_id)
         return render_template("post_detail.html", title=post.title, post=post)
+
+    @app.route("/user/<string:username>")
+    def user_profile(username):
+        user = User.query.filter_by(username=username).first_or_404()
+        posts = (
+            Post.query.filter_by(author=user)
+            .order_by(Post.date_posted.desc())
+            .all()
+        )
+        is_owner = current_user.is_authenticated and current_user.id == user.id
+        return render_template(
+            "profile.html",
+            title=f"{user.username} | Profile",
+            profile_user=user,
+            posts=posts,
+            is_owner=is_owner,
+        )
 
     @app.route("/post/<int:post_id>/edit", methods=["GET", "POST"])
     @login_required
