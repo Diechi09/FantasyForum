@@ -1,11 +1,14 @@
 import json
 from datetime import datetime
 
-from flask import abort, flash, jsonify, redirect, render_template, request, url_for
+from flask import abort, current_app, flash, jsonify, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
 from forms import CommentForm, LoginForm, PostForm, RegistrationForm
 
+from sqlalchemy import text
+
+from . import db
 from .models import Post
 from .services.auth import authenticate_user, create_user, find_existing_user
 from .services.posts import (
@@ -137,6 +140,23 @@ def register_routes(app):
     @app.get("/api/health")
     def api_health():
         return jsonify({"status": "ok"}), 200
+
+    @app.get("/health/live")
+    def health_live():
+        return jsonify({"status": "live"}), 200
+
+    @app.get("/health/ready")
+    def health_ready():
+        try:
+            db.session.execute(text("SELECT 1"))
+        except Exception:
+            return jsonify({"status": "unhealthy", "details": "database unreachable"}), 503
+        return jsonify({"status": "ready"}), 200
+
+    @app.get("/metrics")
+    def metrics():
+        registry = current_app.extensions.get("metrics_registry")
+        return jsonify(registry.snapshot()), 200
 
     @app.get("/api/posts")
     def api_posts():
