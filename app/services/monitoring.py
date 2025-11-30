@@ -1,6 +1,5 @@
-"""Monitoring utilities for the Flask application."""
 
-import os
+
 import time
 from typing import List, Optional
 
@@ -102,9 +101,12 @@ def register_monitoring(app):
 def configure_application_insights(app):
     """Configure Azure Application Insights if connection string is provided."""
 
-    connection_string = os.environ.get("APPLICATIONINSIGHTS_CONNECTION_STRING")
-    if not connection_string:
-        return
+    connection_string = (
+        "InstrumentationKey=8b8eb364-0945-443f-accc-40fb6ab3cac6;"
+        "IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;"
+        "LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/;"
+        "ApplicationId=3e5a6c3c-4402-45cd-a880-6bb81161ae89"
+    )
 
     from opencensus.ext.azure.trace_exporter import AzureExporter
     from opencensus.ext.flask.flask_middleware import FlaskMiddleware
