@@ -4,6 +4,7 @@ from flask import Flask
 from flask_wtf.csrf import generate_csrf
 
 from .extensions import csrf, db, login_manager
+from .services.monitoring import configure_application_insights, register_monitoring
 
 
 def create_app():
@@ -38,6 +39,8 @@ def create_app():
     from .routes import register_routes
 
     register_routes(app)
+    register_monitoring(app)
+    configure_application_insights(app)
     return app
 
 
