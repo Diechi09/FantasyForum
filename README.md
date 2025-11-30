@@ -4,6 +4,10 @@ SEE HOW THE PEOPLE FEEL ABOUT PLAYERS, HEAR THE LATEST UPDATES AND WIN YOUR LEAG
 
 Here is a complete guide to running and exploring the Flask app locally.
 
+or try it live
+
+https://diegofantasyforum-app-ccehe3gwhebqg3cm.westeurope-01.azurewebsites.net/home
+
 ## What you get
 - User registration/login with password hashing and persistent sessions.
 - Create, edit, delete, and comment on posts with flairs for **TRADE HELP**, **WAIVER WIRE ADVICE**, **INJURY TALK**, or **OTHER**.
